@@ -13,7 +13,7 @@ window.onload = function (){
         const externalScripts = tempContainer.querySelectorAll('script');
 
         // Inject the external body content into the current document
-        document.getElementById('content-container').innerHTML = externalBody.innerHTML;
+        document.getElementById('body').innerHTML = externalBody.innerHTML;
 
         // Append the external styles to the head of the current document
         externalStyles.forEach(style => document.head.appendChild(style.cloneNode(true)));
