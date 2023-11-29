@@ -13,14 +13,15 @@
 			<div class="flex-container-1-1-1-1">
 				<h2 id="secondaryh2">Sign In</h2>
 				<h2>Sign Up</h2>
+				<span class="error-message"><!--#error_message1#--></span>
 			</div>
 			<p>Create your Emotify account:</p>
 			<form>
-				<input type="email" name="email" placeholder="Email">
-				<input type="text" name="username" placeholder="Username">
-				<input type="password" name="password" placeholder="Password">
+				<input type="email" name="email" id="email" placeholder="Email">
+				<input type="text" name="username" id="username" placeholder="Username">
+				<input type="password" name="password" id="password" placeholder="Password">
 			</form>
-			<a href="home.html" id="signupbutton"><button>Sign Up</button></a>
+			<a onclick="signUp()" id="signupbutton"><button>Sign Up</button></a>
 			<p style="text-align: center; margin-top: 2vh;">or</p>
 			<a id="signina" href="login.html">Sign In</a>
 			<a id="guesta" href="home.html">Continue as Guest</a>
@@ -32,4 +33,5 @@
 		</div>
 	</div>
 </body>
+<script src="signup.js"></script>
 </html>

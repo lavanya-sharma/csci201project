@@ -1,5 +1,29 @@
 function signIn() {
+		var username = document.getElementById('username').value;
+		var password = document.getElementById('password').value;
 		
+	  var servletUrl = "Login";
+
+	  // Use the fetch API to send a POST request
+	  fetch(servletUrl, {
+	    method: "POST",
+	    headers: {
+	      "Content-Type": "application/x-www-form-urlencoded",
+	    },
+	    body: "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password),
+	  })
+	    .then(response => response.text())
+	    .then(responseText => {
+	      // Display the response from the servlet
+	      document.getElementById('response').innerHTML = responseText;
+	    })
+	    .catch(error => {
+	      // Handle errors
+	      console.error("Error:", error);
+	    });
+		
+		
+/**
 	fetch('home.html')
       .then(response => response.text())
       .then(html => {
@@ -27,6 +51,8 @@ function signIn() {
         });
       })
       .catch(error => console.error('Error loading external content:', error));
+      
+       */
 
 }
 
