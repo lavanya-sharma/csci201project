@@ -160,7 +160,7 @@ public class API {
     public static void main(String[] args) {
         try {
             String accessToken = getClientCredentialsAccessToken();
-            searchSongs(accessToken, "My wife just left me, give me some songs to win my custody battle");
+            searchSongs(accessToken, "I'm pretty happy but I'm stressed for finals");
         } catch (Exception e) {
             e.printStackTrace();
         }
