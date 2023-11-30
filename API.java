@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -62,7 +63,7 @@ public class API {
     	 // Replace with your actual API key
         String apiKey = "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";
         
-        String engineeredPrompt = " Given the description of this person's mood, give me a list of 5 songs that this person would want to most likely listen to and align with emotionally. Format in a comma-separated list with no quotation marks. Example: 'songName1 - songArtist1, songName2 - songArtist2, songName3 - songArtist3, songName4 - songArtist4, songName5 - songArtist5'. DON'T GENERATE EXTRA TEXT AND STRICTLY ADHERE TO THE STRUCTURE OF THE OUTPUT AS OUTLINED.";
+        String engineeredPrompt = " Given the description of this person's mood or request, search through Spotify's song database to give me a list of 5 songs that this person would want to most likely listen to and align with emotionally. Format in a comma-separated list with no quotation marks. Example: 'songName1 - songArtist1, songName2 - songArtist2, songName3 - songArtist3, songName4 - songArtist4, songName5 - songArtist5'. DON'T GENERATE EXTRA TEXT AND STRICTLY ADHERE TO THE STRUCTURE OF THE OUTPUT AS OUTLINED.";
 
         String jsonPayload = String.format("{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", prompt + engineeredPrompt);
 
@@ -95,7 +96,7 @@ public class API {
         }
         
         
-        ArrayList<ArrayList<String>> songList = parseSongs(content);
+        ArrayList<Map<String,String>> songList = parseSongs(content);
 	     /*   
         for(int i = 0; i<songList.size();i++) {
         	for(int j=0; j<songList.get(i).size();j++) {
@@ -103,54 +104,58 @@ public class API {
         	}
         }
     	*/
-    	for(int i = 0; i<songList.size();i++) {
-	        String sContent = "remaster%2520track%3A"+songList.get(i).get(0)+"%2520artist%3A"+songList.get(i).get(1);
-	        
-	        
-	        String encodedKeyword = java.net.URLEncoder.encode(sContent, StandardCharsets.UTF_8.toString());
-	        URL url = new URL("https://api.spotify.com/v1/search?q=" + encodedKeyword + "&type=track&limit=1");
-	        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	        connection.setRequestMethod("GET");
-	        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-	
-	        StringBuilder response = new StringBuilder();
-		        try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-	            String line;
-	            while ((line = br.readLine()) != null) {
-	                response.append(line);
-	            }
-	        }
-	
-	        JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
-	        JsonArray tracks = jsonObject.getAsJsonObject("tracks").getAsJsonArray("items");
-	
-	        for (JsonElement item : tracks) {
-	            JsonObject track = item.getAsJsonObject();
-	            String name = track.get("name").getAsString();
-	            System.out.println("Track: " + name);
-	        }
-    	}
-    	
+        for (Map<String, String> songMap : songList) {
+            // Assuming each map has only one entry: song name (key) and artist name (value)
+            Map.Entry<String, String> entry = songMap.entrySet().iterator().next();
+            String songName = entry.getKey();
+            String artistName = entry.getValue();
+
+            String sContent = "remaster%2520track%3A" + songName + "%2520artist%3A" + artistName;
+            String encodedKeyword = java.net.URLEncoder.encode(sContent, StandardCharsets.UTF_8.toString());
+            URL url = new URL("https://api.spotify.com/v1/search?q=" + encodedKeyword + "&type=track&limit=1");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            StringBuilder response = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    response.append(line);
+                }
+            }
+
+            JsonObject jsonObject = JsonParser.parseString(response.toString()).getAsJsonObject();
+            JsonArray tracks = jsonObject.getAsJsonObject("tracks").getAsJsonArray("items");
+
+            if (tracks.size() > 0) {
+                JsonObject track = tracks.get(0).getAsJsonObject();
+                String trackName = track.get("name").getAsString();
+                String ID = track.get("id").getAsString();
+
+                System.out.println("Track: " + trackName);
+                System.out.println("ID: " + ID);
+            }
+        }
     }
         
         
     
     
-    private static ArrayList<ArrayList<String>> parseSongs(String input) {
+    private static ArrayList<Map<String, String>> parseSongs(String input) {
         // Split the input string into song-artist pairs
         String[] pairs = input.split(", ");
 
-        ArrayList<ArrayList<String>> songs = new ArrayList<>();
+        ArrayList<Map<String, String>> songs = new ArrayList<>();
         for (String pair : pairs) {
             // Split each pair into song and artist
             String[] songInfo = pair.split(" - ");
             
             // Check if splitting was successful (we expect 2 elements)
             if (songInfo.length == 2) {
-            	ArrayList<String> item = new ArrayList<String>();
-            	item.add(songInfo[0]);
-            	item.add(songInfo[1]);
-                songs.add(item);
+                Map<String, String> songMap = new HashMap<>();
+                songMap.put(songInfo[0], songInfo[1]); // Key: Song Name, Value: Artist Name
+                songs.add(songMap);
             }
         }
         
@@ -160,7 +165,7 @@ public class API {
     public static void main(String[] args) {
         try {
             String accessToken = getClientCredentialsAccessToken();
-            searchSongs(accessToken, "I'm pretty happy but I'm stressed for finals");
+            searchSongs(accessToken, "I just got done with finals I'm in a festive christmas mood");
         } catch (Exception e) {
             e.printStackTrace();
         }
