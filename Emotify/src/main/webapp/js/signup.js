@@ -1,17 +1,19 @@
 
-function signIn() {
-	fetchFile('signin.html');
+function backToSignIn() {
+	fetchFile('login.html');
 	setUpBanner();
 }
 
-function signUp() {
+function attemptSignUp() {
 	funcSignUp();
 	fetchFile('home.html');
+	showBackButton(false);
 	setUpBanner();
 }
 
 function asGuest() {
 	funcLoginGuest();
 	fetchFile('home.html');
+	showBackButton(false);
     setUpBanner();
 }

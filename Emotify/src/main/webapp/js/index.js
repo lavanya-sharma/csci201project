@@ -4,7 +4,11 @@ let onBannerless = true;
 
 window.onload = function (){	
 	fetchFile('login.html');
-     setUpBanner();
+    setUpBanner();
+    showBackButton(false);
+}
+
+function goBack(){
 }
 
 function onQuit(){
@@ -21,9 +25,9 @@ function onLogin(){
 
 function onHome(){
 	fetchFile('home.html');
+	showBackButton(false);
 	setUpBanner();
 }
-
 
 function funcLogout(){
 	signedIn = false;
@@ -57,6 +61,15 @@ function setUpBanner(){
 		else{
 			document.getElementById("quita").textContent = "Login / Sign Up";
 		}
+	}
+}
+
+function showBackButton(boolean){
+	if(boolean){
+		document.getElementById("backa").style.display = "block";
+	}
+	else{
+		document.getElementById("backa").style.display = "none";
 	}
 }
 

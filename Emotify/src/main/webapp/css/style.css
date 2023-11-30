@@ -39,8 +39,10 @@ a, a:visited, a:hover, a:active {
 #banner {
 	position: absolute;
 	display: grid;
-	grid-template-columns: 1fr 2fr 2fr 12fr 2fr;
-	align-items:baseline;
+	grid-template-columns: 1fr 2fr 5fr 7fr 2fr;
+	grid-template-rows: 2fr 1fr;
+	height: 15vh;
+	align-items:center;
 	width: 100vw;
 	padding-left: 4vw;
 	padding-right: 4vw;
@@ -48,12 +50,14 @@ a, a:visited, a:hover, a:active {
 }
 
 #banner img {
-	width: fit-content;
+	width: 5vw;
 }
 
 #banner h1 {
 	color: var(--primary);
 	font-size: 2.4em;
+	margin-bottom: 0;
+	margin-left: 1vw;
 }
 #banner h2 {
 	color: var(--compliment-pink-oof);
@@ -65,5 +69,24 @@ a, a:visited, a:hover, a:active {
 	color: var(--secondary);
 	font-size: 1.6em;
 	font-weight:300;
+}
+
+#back-btn {
+	width: 4vw;
+	font-size: 1.5em;
+	font-weight: bold;
+	height: 4vw;
+	color: var(--primary);
+	margin: 1.5vw .5vw .5vw .5vw;
+	background-color: rgba(0,0,0,0);
+	box-shadow: 0 0 5px black;
+	text-align: center;
+}
+#back-btn:hover {
+	color: whitesmoke;
+	background-color: var(--primary);
+	box-shadow: 0 0 0 black;
+	animation-duration: 0.5s;
+	transform: scale(1);
 }
 
