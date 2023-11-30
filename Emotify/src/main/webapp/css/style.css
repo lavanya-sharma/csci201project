@@ -39,12 +39,16 @@ a, a:visited, a:hover, a:active {
 #banner {
 	position: absolute;
 	display: grid;
-	grid-template-columns: 1fr 1fr 6fr 1fr;
+	grid-template-columns: 1fr 2fr 2fr 12fr 2fr;
 	align-items:baseline;
 	width: 100vw;
 	padding-left: 4vw;
 	padding-right: 4vw;
 	padding-top: 5vh;
+}
+
+#banner img {
+	width: fit-content;
 }
 
 #banner h1 {

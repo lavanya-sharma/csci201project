@@ -53,9 +53,8 @@
 	font-weight: 400;
 	text-align: center;
 	color: rgb(52, 52, 52);
-	padding-bottom: 3vh;
 	transition: all .5s ease;
-
+	margin-bottom: 3vh;
 }
 
 .card p {

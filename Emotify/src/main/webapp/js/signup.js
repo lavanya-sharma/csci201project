@@ -1,12 +1,12 @@
 
 function signIn() {
-	funcLogin();
-	fetchFile('home.html');
+	fetchFile('signin.html');
 	setUpBanner();
 }
 
 function signUp() {
-	fetchFile('signup.html');
+	funcSignUp();
+	fetchFile('home.html');
 	setUpBanner();
 }
 
