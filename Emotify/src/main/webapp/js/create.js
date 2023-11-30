@@ -3,7 +3,7 @@ function submitSearchForm(event) {
 	event.preventDefault();
 
 	var xhr = new XMLHttpRequest();
-	var url = "../../Api"; // Servlet URL
+	var url = "../Api"; // Servlet URL
 	
 	// Collect form data
 	var formData = new FormData(document.getElementById('Form'));
@@ -11,13 +11,15 @@ function submitSearchForm(event) {
 	// Build the query string
 	var queryString = new URLSearchParams(formData).toString();
 	
-	xhr.open("POST", url + "?" + queryString, true);
-	
+	xhr.open("POST", url + "?" +  queryString, true);
+		
 	xhr.onreadystatechange = function() {
-	if (xhr.readyState == 4 && xhr.status == 200) {
-		var response = JSON.parse(xhr.responseText);
-		displayResult(response);
-	}
+		console.log(xhr.readyState);
+		console.log(xhr.status);
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var response = JSON.parse(xhr.responseText);
+			displayResult(response);
+		}
 	};
 	xhr.send();
 	
@@ -27,16 +29,21 @@ function submitSearchForm(event) {
 function displayResult(data) {
 	
 	document.getElementById("createForm").style.display="none";
+	document.getElementById("output").style.display="flex";
             
-    var resultDiv = document.getElementById('output');
+    const scrollContainer = document.getElementById('output');
 
-    var content = "";
+    // Add items to the container
+    for (let i = 0; i < data.songids.length; i++) {
+         const iframe = document.createElement('iframe');
+	    iframe.id = 'spotifyFrame';
+	    iframe.src = 'https://open.spotify.com/embed/track/' + data.songids[i] + '?utm_source=generator&theme=0';
+	    iframe.width = '100%';
+	    iframe.allowFullscreen = true;
+	    iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+	    iframe.loading = 'lazy';
 
-    //add to content from data to generate front-end
-  
-	for(var i = 0; i<data.songids.length; i++){
-		content += "<p>" +data.songids[i] + "<\p>"; 
-	}
-    
-    resultDiv.innerHTML = content;
+      
+      scrollContainer.appendChild(iframe);
+  	}
 }

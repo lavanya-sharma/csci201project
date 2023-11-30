@@ -15,6 +15,24 @@ form {
 	display: grid;
 }
 
+#output{
+	display: none;
+	position: absolute;
+	flex-direction: column;
+	height: 65vh;
+	width: 70vw;
+	margin: 30vh 15vw 15vw;
+  	white-space: nowrap; /* Prevents items from wrapping to the next line */
+  	overflow-x: auto;    /* Enable horizontal scrolling */
+  	border: 1px solid #ccc;
+  	padding: 10px;
+}
+
+#output > * {
+	height: 250px;
+}
+
+
 #createForm {
 	display: flex;
 	flex-direction: column;

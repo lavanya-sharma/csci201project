@@ -1,6 +1,7 @@
 
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,23 +32,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.catalina.connector.Response;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @WebServlet("/Api")
-public class api extends HttpServlet {
+public class Api extends HttpServlet {
 	
     private static String clientId = "c993bc96218846729531c4817aa41b26"; // Replace with your client ID
     private static String clientSecret = "222d2a5f0c074a1e828b4eee8c3a8ea5"; // Replace with your client secret
 
 	private static final long serialVersionUID = 1L;
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    }
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("in service");
 		String prompt = request.getParameter("prompt");
         try {
     		Queue<String> idQueue;
@@ -93,13 +93,13 @@ public class api extends HttpServlet {
     
     public static Queue<String> searchSongs(String accessToken, String prompt) throws Exception {
     	//CHAT GPT API
-    	
+	
     	 // Replace with your actual API key
-        String apiKey = "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";
+        String apiKey = "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";
         
-        String engineeredPrompt = " Given the description of this person's mood or request, search through Spotify's song database to give me a list of 5 songs that this person would want to most likely listen to and align with emotionally. Format in a comma-separated list with no quotation marks. Example: 'songName1 - songArtist1, songName2 - songArtist2, songName3 - songArtist3, songName4 - songArtist4, songName5 - songArtist5'. DON'T GENERATE EXTRA TEXT AND STRICTLY ADHERE TO THE STRUCTURE OF THE OUTPUT AS OUTLINED.";
+        String engineeredPrompt = "Given the description of this person's mood or request, search through Spotify's song database to give me a list of 5 songs that this person would want to most likely listen to and align with emotionally. Format using Example as a reference. Example: 'songName1 - songArtist1%songName2 - songArtist2%songName3 - songArtist3%songName4 - songArtist4%songName5 - songArtist5'. DON'T GENERATE EXTRA TEXT AND STRICTLY ADHERE TO THE STRUCTURE OF THE OUTPUT AS OUTLINED.";
 
-        String jsonPayload = String.format("{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", prompt + engineeredPrompt);
+        String jsonPayload = String.format("{\"model\": \"gpt-4-1106-preview\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", prompt + engineeredPrompt);
 
         // Setup the HTTP Client and Request
         HttpClient client = HttpClient.newHttpClient();
@@ -115,6 +115,7 @@ public class api extends HttpServlet {
         String content ="";
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            System.out.println(response.body());
             JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
 
             // Navigate through the object to get the 'content' field
@@ -128,8 +129,8 @@ public class api extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        
+        System.out.println(content);
+
         ArrayList<Map<String,String>> songList = parseSongs(content);
 	     /*   
         for(int i = 0; i<songList.size();i++) {
@@ -138,6 +139,7 @@ public class api extends HttpServlet {
         	}
         }
     	*/
+        System.out.println(songList);
         Queue<String> resultQueue = new LinkedList<>();
         for (Map<String, String> songMap : songList) {
             // Assuming each map has only one entry: song name (key) and artist name (value)
@@ -171,12 +173,13 @@ public class api extends HttpServlet {
                 resultQueue.add(ID);
             }
         }
+        System.out.println(resultQueue);
         return resultQueue;
     }
     
     private static ArrayList<Map<String, String>> parseSongs(String input) {
         // Split the input string into song-artist pairs
-        String[] pairs = input.split(", ");
+        String[] pairs = input.split("%");
 
         ArrayList<Map<String, String>> songs = new ArrayList<>();
         for (String pair : pairs) {
