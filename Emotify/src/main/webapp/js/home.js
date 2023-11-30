@@ -11,8 +11,13 @@ function toCreate() {
 
 function toFavorites() {
 	fetchFile('favorites.html');
+	loadPage();
 	showBackButton(true);
 }
 
 function goBack(){
+}
+
+function loadPage(){
+	
 }

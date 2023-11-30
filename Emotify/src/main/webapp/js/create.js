@@ -3,7 +3,7 @@ function submitSearchForm(event) {
 	event.preventDefault();
 
 	var xhr = new XMLHttpRequest();
-	var url = "API"; // Servlet URL
+	var url = "../../Api"; // Servlet URL
 	
 	// Collect form data
 	var formData = new FormData(document.getElementById('Form'));
@@ -25,13 +25,18 @@ function submitSearchForm(event) {
 
 }
 function displayResult(data) {
+	
+	document.getElementById("createForm").style.display="none";
             
-            var resultDiv = document.getElementById('output');
+    var resultDiv = document.getElementById('output');
 
-            var content = "";
+    var content = "";
 
-            //add to content from data to generate front-end
-
-            
-            resultDiv.innerHTML = content;
-        }
+    //add to content from data to generate front-end
+  
+	for(var i = 0; i<data.songids.length; i++){
+		content += "<p>" +data.songids[i] + "<\p>"; 
+	}
+    
+    resultDiv.innerHTML = content;
+}

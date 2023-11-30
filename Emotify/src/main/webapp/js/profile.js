@@ -6,5 +6,5 @@ function signOutFromProfile(){
 
 function goBack(){
 	fetchFile('home.html');
-	bshowBackButton(false);
+	showBackButton(false);
 }
