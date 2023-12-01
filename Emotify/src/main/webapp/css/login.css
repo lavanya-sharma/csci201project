@@ -74,6 +74,13 @@ button:hover {
 	margin: 0 auto 0 auto;
 }
 
+#message {
+	display: none;
+	font-size: 1.3em;
+	color: red;
+	text-align: center;
+	margin-top: 1vh;
+}
 
 #front-img {
 	position:relative;

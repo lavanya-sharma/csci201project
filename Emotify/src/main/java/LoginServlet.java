@@ -46,24 +46,22 @@ public class LoginServlet extends HttpServlet {
 					session.setAttribute("user", userList.getUserList().get(i));
 				}
 			}
-			// sends to the Home Servlet with path @WebServlet("/Home") update as necessary
-			response.sendRedirect("Home");
+			PrintWriter out = response.getWriter();
+            out.print("true");
+            out.flush();
+            out.close();
+			
 		}
 		else {
 			System.out.println("got here");
 			response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-            String errorMessage = "<p style='color: red;'>Invalid Credentials. Please try again.</p>";
-            String path = getServletContext().getRealPath("login.html");
-            String htmlContent = readHtmlFile(path);
-            htmlContent = htmlContent.replace("<!--#error_message1#-->", errorMessage);
-            out.print(htmlContent);
+            out.print("false");
             out.flush();
+            out.close();
 		}
+		
 	
-		
-		
-		
 //		else if(pressed_button.equals("signup_button")) {
 //			String signup_email = request.getParameter("signup_email");
 //			String signup_username = request.getParameter("signup_username");

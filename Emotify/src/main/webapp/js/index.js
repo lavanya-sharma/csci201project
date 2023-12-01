@@ -1,11 +1,17 @@
 
 let signedIn = false;
 let onBannerless = true;
+let validUser = false;
 
 window.onload = function (){	
+	compileAllFiles();
 	fetchFile('login.html');
+	loadPage();
     setUpBanner();
     showBackButton(false);
+    if(!getCookie('credits')){
+		setCookie('credits', 5, 1);
+	}
 }
 
 function goBack(){
@@ -15,6 +21,7 @@ function onQuit(){
 	fetchFile('login.html');
 	funcLogout();
  	setUpBanner();
+ 	validUser = false;
 }
 
 function onLogin(){
@@ -63,16 +70,22 @@ function funcLogin(){
 			//showBackButton(false);
 			//setUpBanner();
 		}
+		if(xhr.status ==200 && xhr.readyState == 4){
+			console.log(xhr.responseText);
+			if(xhr.responseText.includes("false")){
+				validUser= false;
+			}
+			else{
+				validUser = true;
+			}
+		}
+		
 	};
 	xhr.send();
-
-  
-	
 	//fetchFile('results.html');
-}
-
 	
-
+	return validUser;
+}
 
 function funcLoginGuest(){
 	signedIn = false;
@@ -80,11 +93,11 @@ function funcLoginGuest(){
 }
 
 function funcSignUp() {
-		var xhr = new XMLHttpRequest();
+	var xhr = new XMLHttpRequest();
 	var url = "../SignUp"; // Servlet URL
 	
 	// Collect form data
-	var email = document.getElementById("username").value;
+	var email = document.getElementById("email").value;
 	var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
 	var formData = new FormData();
@@ -142,35 +155,91 @@ function showBackButton(boolean){
 	}
 }
 
-function fetchFile(file) {
-  fetch(file)
+function loadPage() {
+}
+
+// Function to set a cookie
+function setCookie(name, value, days) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/Emotify`;
+}
+
+// Function to get a cookie value
+function getCookie(name) {
+    const cookieArray = document.cookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+        const cookiePair = cookieArray[i].split('=');
+        if (cookiePair[0].trim() === name) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
+
+function decrementCookie(name) {
+    const cookieArray = document.cookie.split(';');
+    for (let i = 0; i < cookieArray.length; i++) {
+        const cookiePair = cookieArray[i].split('=');
+        if (cookiePair[0].trim() === name) {
+            let currentValue = parseInt(cookiePair[1]) || 0;
+            if (currentValue > 0) {
+                currentValue--;
+                setCookie(name, currentValue, 1);
+            }
+        }
+    }
+}
+
+async function fetchFile(file) {
+  try {
+    const response = await fetch(file);
+    const html = await response.text();
+
+    // Create a temporary container to parse the external content
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = html;
+
+    // Extract the body content, styles, and scripts from the temporary container
+    const externalBody = tempContainer.querySelector('#body');
+
+    // Inject the external body content into the current document's body
+    const currentBody = document.getElementById('body');
+    currentBody.innerHTML = ''; // Clear existing content
+    currentBody.appendChild(externalBody.cloneNode(true));
+  } catch (error) {
+    console.error('Error loading external content:', error.message);
+  }
+}
+
+
+
+function compileAllFiles(){
+	fetchJSCSS('home.html');
+	fetchJSCSS('login.html');
+	fetchJSCSS('signup.html');
+	fetchJSCSS('profile.html');
+	fetchJSCSS('create.html');
+}
+
+function fetchJSCSS(file){
+	fetch(file)
     .then(response => response.text())
     .then(html => {
-      // Create a temporary container to parse the external content
-      const tempContainer = document.createElement('div');
-      tempContainer.innerHTML = html;
+	  	const tempContainer = document.createElement('div');
+	  	tempContainer.innerHTML = html;
+	
+		const externalStyles = tempContainer.querySelectorAll('link[rel="stylesheet"]');
+      	const externalScripts = tempContainer.querySelectorAll('script');
 
-      // Extract the body content, styles, and scripts from the temporary container
-      const externalBody = tempContainer.querySelector('#body');
+      	externalStyles.forEach(style => document.head.appendChild(style.cloneNode(true)));
 
-      const externalStyles = tempContainer.querySelectorAll('link[rel="stylesheet"]');
-      const externalScripts = tempContainer.querySelectorAll('script');
-
-      // Inject the external body content into the current document's body
-      const currentBody = document.getElementById('body');
-      currentBody.innerHTML = ''; // Clear existing content
-      currentBody.appendChild(externalBody.cloneNode(true));
-
-      // Append the external styles to the head of the current document
-      externalStyles.forEach(style => document.head.appendChild(style.cloneNode(true)));
-
-      // Append the external scripts to the body of the current document
-      externalScripts.forEach(script => {
+		externalScripts.forEach(script => {
         const newScript = document.createElement('script');
         newScript.src = script.src;
         newScript.defer = true; // Assuming you want to defer script execution
         document.body.appendChild(newScript);
-      });
-    })
+      	});
+	})
     .catch(error => console.error('Error loading external content:', error.message));
 }

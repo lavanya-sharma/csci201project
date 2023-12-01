@@ -15,21 +15,63 @@ form {
 	display: grid;
 }
 
+#you-searched {
+	display: flex;	
+	position: absolute;
+	flex-direction: row;
+	height: 6vh;
+	width: 70vw;
+	margin: 23vh 15vw 0 15vw;
+}
+
+#ys-you {
+	text-align: right;
+	font-size: 1.5em;
+	font-weight: 400;
+	color: rgb(40,40,40);
+}
+
+#ys-prompt {
+	text-align: left;
+	font-size: 1.3em;
+	color: lightgrey;
+	margin-left: 3vw;
+}
+
+#create-message {
+	margin-top: 3vh;
+	text-align: center;
+	font-size: 1.3em;
+	font-weight: 300;
+}
+
 #output{
-	display: none;
+	display: flex;
 	position: absolute;
 	flex-direction: column;
 	height: 65vh;
-	width: 70vw;
-	margin: 30vh 15vw 15vw;
+	width: 80vw;
+	margin: 30vh 10vw 0 10vw;
   	white-space: nowrap; /* Prevents items from wrapping to the next line */
   	overflow-x: auto;    /* Enable horizontal scrolling */
-  	border: 1px solid #ccc;
+  	border-top: 1px solid lightslategrey;
+  	border-bottom: 1px solid lightslategray;
+  	box-shadow: 0px -10px 10px -10px black,
+  				0px  10px 10px -10px black;
   	padding: 10px;
 }
+#output::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0);
+}
+#output::-webkit-scrollbar-thumb {
+  background-color: whitesmoke;
+  border-radius: 6px;
+  border: 3px solid rgba(0, 0, 0, 0);
+}
+
 
 #output > * {
-	height: 250px;
+	height: 90px;
 }
 
 

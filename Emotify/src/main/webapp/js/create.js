@@ -1,7 +1,6 @@
 function submitSearchForm(event) {
 	
 	event.preventDefault();
-
 	var xhr = new XMLHttpRequest();
 	var url = "../Api"; // Servlet URL
 	
@@ -18,7 +17,7 @@ function submitSearchForm(event) {
 		console.log(xhr.status);
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			var response = JSON.parse(xhr.responseText);
-			displayResult(response);
+			displayResult(response, queryString);
 		}
 	};
 	xhr.send();
@@ -26,10 +25,12 @@ function submitSearchForm(event) {
 	//fetchFile('results.html');
 
 }
-function displayResult(data) {
+function displayResult(data, prompt) {
 	
 	document.getElementById("createForm").style.display="none";
+	document.getElementById("you-searched").style.display = "flex";
 	document.getElementById("output").style.display="flex";
+	document.getElementById("ys-prompt").textContent =prompt.substring(7);
             
     const scrollContainer = document.getElementById('output');
 
@@ -41,9 +42,54 @@ function displayResult(data) {
 	    iframe.width = '100%';
 	    iframe.allowFullscreen = true;
 	    iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-	    iframe.loading = 'lazy';
+	    iframe.loading = 'eager';
+	    iframe.style.border = 'none';
 
       
       scrollContainer.appendChild(iframe);
   	}
+}
+
+function goBack(){
+	fetchFile('home.html');
+}
+
+function updateClickCount() {
+    const clickButton = document.getElementById('searchbtn');
+    const counterElement = document.getElementById('create-message');
+
+    let remainingCredits = parseInt(getCookie('credits')) || 0;
+
+    counterElement.textContent = `You have ${remainingCredits} credits. Please sign up!`;
+	
+    clickButton.addEventListener('click', decrement);
+}
+
+
+function decrement() {
+	let remainingCredits = parseInt(getCookie('credits')) || 0;
+	if(!signedIn && remainingCredits>0)
+	{
+    	const counterElement = document.getElementById('create-message');
+		let remainingCredits = parseInt(getCookie('credits')) || 0;
+	    counterElement.textContent = `You have ${remainingCredits} credits. Please sign up!`;
+	    decrementCookie('credits');
+	}
+}
+
+
+function loadPage(){
+	if(signedIn){
+		document.getElementById("create-message").textContent = "Thank you for signing up!";
+	}
+	else {
+		let remainingCredits = parseInt(getCookie('credits')) || 0;
+		document.getElementById("create-message").textContent = "You have "+remainingCredits+" credits left. Please sign up!";
+		if(remainingCredits < 1)
+		{
+			document.getElementById("searchbtn").onclick="";
+			document.getElementById("searchbtn").style.backgroundColor="grey";
+		}
+	}
+	updateClickCount();
 }

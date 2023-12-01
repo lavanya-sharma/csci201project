@@ -14,7 +14,7 @@ public class JDBCConnector {
 		PreparedStatement st = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/finalproject?user=root&password=root");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/finalproject?user=root&password=rootroot");
 			st = conn.prepareStatement("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
 			st.setString(1, username);
 			st.setString(2, password);
@@ -49,8 +49,8 @@ public class JDBCConnector {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/finalproject?user=root&password=root");
-            st = conn.prepareStatement("SELECT * FROM users WHERE username = ? OR password = ?");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/finalproject?user=root&password=rootroot");
+            st = conn.prepareStatement("SELECT * FROM users WHERE username = ? && password = ?");
             st.setString(1, username);
             st.setString(2, password);
             rs = st.executeQuery();
@@ -91,7 +91,7 @@ public class JDBCConnector {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/finalproject?user=root&password=root");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost/finalproject?user=root&password=rootroot");
             st = conn.prepareStatement("SELECT username, password, email FROM users");
             rs = st.executeQuery();
             
@@ -137,7 +137,7 @@ public class JDBCConnector {
 		int user_id = -1;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost/finalproject?user=root&password=root");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/finalproject?user=root&password=rootroot");
 			st = conn.prepareStatement("SELECT user_id FROM users WHERE username = ? AND password = ?");
 			st.setString(1, user.getUsername());
 			st.setString(2, user.getPassword());

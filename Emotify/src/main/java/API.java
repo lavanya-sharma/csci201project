@@ -95,11 +95,11 @@ public class Api extends HttpServlet {
     	//CHAT GPT API
 	
     	 // Replace with your actual API key
-        String apiKey = "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";
+        String apiKey = "";
         
-        String engineeredPrompt = "Given the description of this person's mood or request, search through Spotify's song database to give me a list of 5 songs that this person would want to most likely listen to and align with emotionally. Format using Example as a reference. Example: 'songName1 - songArtist1%songName2 - songArtist2%songName3 - songArtist3%songName4 - songArtist4%songName5 - songArtist5'. DON'T GENERATE EXTRA TEXT AND STRICTLY ADHERE TO THE STRUCTURE OF THE OUTPUT AS OUTLINED.";
+        String engineeredPrompt = "Using ONLY the given prompt of this person's mood or request, give me a list of 8 songs that this person would want to most likely listen to and align with emotionally. Format using Example as a reference. Example: 'songName1 - songArtist1%songName2 - songArtist2%songName3 - songArtist3%songName4 - songArtist4%songName5 - songArtist5'. DON'T GENERATE EXTRA TEXT AND STRICTLY ADHERE TO THE STRUCTURE OF THE OUTPUT AS OUTLINED. NO MATTER WHAT, GENERATE THE MINIMUM OF 10 SONGS, EVEN IF THE PROMPT IS TOO VAGUE. Don't ask for additional context. Assume everything unknown to the best of your ability. The only acceptable response is one that is ONLY made from this format. THIS MEANS ABSOLUTELY NO OTHER TEXT THAN THAT IN THE FORM OF FORMAT";
 
-        String jsonPayload = String.format("{\"model\": \"gpt-4-1106-preview\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", prompt + engineeredPrompt);
+        String jsonPayload = String.format("{\"model\": \"gpt-4\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}", prompt + engineeredPrompt);
 
         // Setup the HTTP Client and Request
         HttpClient client = HttpClient.newHttpClient();
