@@ -35,9 +35,44 @@ function funcLogout(){
 }
 
 function funcLogin(){
-	signedIn = true;
-	onBannerless = false;
+	var xhr = new XMLHttpRequest();
+	var url = "../Login"; // Servlet URL
+	
+	// Collect form data
+	var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+	var formData = new FormData();
+	formData.append("username",username);
+	formData.append("password",password);
+	
+	// Build the query string
+	var queryString = new URLSearchParams(formData).toString();
+	
+	xhr.open("POST", url + "?" +  queryString, true);
+		
+	xhr.onreadystatechange = function() {
+		console.log(xhr.readyState);
+		console.log(xhr.status);
+		if (xhr.status == 302) {
+			//var response = JSON.parse(xhr.responseText);
+			//displayResult(response);
+			var redirectUrl = xhr.getResponseHeader("Location");
+            window.location.href = redirectUrl;
+                signedIn = true;
+				onBannerless = false;
+			//showBackButton(false);
+			//setUpBanner();
+		}
+	};
+	xhr.send();
+
+  
+	
+	//fetchFile('results.html');
 }
+
+	
+
 
 function funcLoginGuest(){
 	signedIn = false;
@@ -45,6 +80,40 @@ function funcLoginGuest(){
 }
 
 function funcSignUp() {
+		var xhr = new XMLHttpRequest();
+	var url = "../SignUp"; // Servlet URL
+	
+	// Collect form data
+	var email = document.getElementById("username").value;
+	var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+	var formData = new FormData();
+	formData.append("email",email);
+	formData.append("username",username);
+	formData.append("password",password);
+	
+	// Build the query string
+	var queryString = new URLSearchParams(formData).toString();
+	
+	xhr.open("POST", url + "?" +  queryString, true);
+		
+	xhr.onreadystatechange = function() {
+		console.log(xhr.readyState);
+		console.log(xhr.status);
+		if (xhr.status == 302) {
+			//var response = JSON.parse(xhr.responseText);
+			//displayResult(response);
+			var redirectUrl = xhr.getResponseHeader("Location");
+            window.location.href = redirectUrl;
+                signedIn = true;
+				onBannerless = false;
+			//showBackButton(false);
+			//setUpBanner();
+		}
+	};
+	xhr.send();
+
+  
 	signedIn = true;
 	onBannerless = false;
 }

@@ -17,3 +17,4 @@ function asGuest() {
 	showBackButton(false);
     setUpBanner();
 }
+
