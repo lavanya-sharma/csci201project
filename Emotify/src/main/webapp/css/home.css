@@ -1,7 +1,7 @@
 
 .flex-container-1-1-1 {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr;
 	justify-items: center;
 	align-self: center;
 	align-content: center;

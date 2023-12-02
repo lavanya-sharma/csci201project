@@ -55,14 +55,18 @@ function goBack(){
 }
 
 function updateClickCount() {
-    const clickButton = document.getElementById('searchbtn');
-    const counterElement = document.getElementById('create-message');
-
-    let remainingCredits = parseInt(getCookie('credits')) || 0;
-
-    counterElement.textContent = `You have ${remainingCredits} credits. Please sign up!`;
+	    const clickButton = document.getElementById('searchbtn');
+	    const counterElement = document.getElementById('create-message');
 	
-    clickButton.addEventListener('click', decrement);
+	    let remainingCredits = parseInt(getCookie('credits')) || 0;
+		if(!signedIn){
+			counterElement.textContent = `You have ${remainingCredits} credits. Please sign up!`;
+		}
+		else{
+			counterElement.textContent = `Thank you for signing up!`;
+		}
+		
+	    clickButton.addEventListener('click', decrement);
 }
 
 

@@ -39,7 +39,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @WebServlet("/Api")
-public class Api extends HttpServlet {
+public class API extends HttpServlet {
 	
     private static String clientId = "c993bc96218846729531c4817aa41b26"; // Replace with your client ID
     private static String clientSecret = "222d2a5f0c074a1e828b4eee8c3a8ea5"; // Replace with your client secret

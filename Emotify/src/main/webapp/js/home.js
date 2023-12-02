@@ -7,7 +7,7 @@ function toProfile() {
 async function toCreate() {
   try {
     await fetchFile('create.html');
-    console.log('Fetch operation completed.');
+    console.log('fetch operation completed');
 
     loadPage();
     showBackButton(true);
@@ -16,11 +16,6 @@ async function toCreate() {
   }
 }
 
-function toFavorites() {
-	fetchFile('favorites.html');
-	loadPage();
-	showBackButton(true);
-}
 
 function goBack(){
 }
